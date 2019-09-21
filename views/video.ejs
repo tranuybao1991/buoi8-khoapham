@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" >
+    <script>
+        $(document).ready(function(){
+
+                $.post('http://localhost:3000/list/cap2',function(data){
+                    var str ='';
+                    str += '<option value="">Chọn cấp 2</option>';
+                data.result.forEach(function(item){
+                        str += '<option value="'+item._id+'">'+item.name+'</option>';
+                    
+                });
+                    $('#slCap2').html(str);
+            });
+
+            $('#addCap2').click(function(){
+                var namecap2 = $('#txtCap2').val();
+               var  idCap1 = $('#slCap1').val();
+               var  videoValue = $('#txtVideo').val();
+                $.post('http://localhost:3000/cap2',{name : namecap2,video:videoValue , idcat: idCap1},function(data, status){
+                    if(data.kq==0){
+                         var str = '';
+                         var stroption = '';
+                          $.post('http://localhost:3000/getlist',function(data, status){
+                            data.result.forEach(function(menucap1){
+                                 str += '<li  class="list-group-item">'+menucap1.name;
+                                str +="<ul>";
+
+                                 stroption += '<option value="">Chọn cấp 2</option>';
+
+                                menucap1.danhsach.forEach(function(menucap2){
+                                    str += '<li>'+menucap2.name+'</li>';
+                                     stroption += '<option value="'+menucap2._id+'">"'+menucap2.name+'"</option>';
+
+                                });
+                                 str +="</ul>";
+                                str +='</li>';
+
+                              
+                            });
+                              $('#listadd').html(str);
+                              $('#listadd').html(str);
+                              alert('Add success');
+                          });
+                          
+                    }else{
+                        alert('error');
+                    }
+                })
+            });
+
+
+
+            $('#addVideo').click(function(){
+                var namevideo = $('#slCap2').val();
+               var  idCap1 = $('#slCap2').val();
+               var  videoValue = $('#txtVideo').val();
+                $.post('http://localhost:3000/cap2',{name : namecap2,video:videoValue , idcat: idCap1},function(data, status){
+                    if(data.kq==0){
+                         var str = '';
+                         var stroption = '';
+                          $.post('http://localhost:3000/getlist',function(data, status){
+                            data.result.forEach(function(menucap1){
+                                 str += '<li  class="list-group-item">'+menucap1.name;
+                                str +="<ul>";
+
+                                 stroption += '<option value="">Chọn cấp 2</option>';
+
+                                menucap1.danhsach.forEach(function(menucap2){
+                                    str += '<li>'+menucap2.name+'</li>';
+                                     stroption += '<option value="'+menucap2._id+'">"'+menucap2.name+'"</option>';
+
+                                });
+                                 str +="</ul>";
+                                str +='</li>';
+
+                              
+                            });
+                              $('#listadd').html(str);
+                              $('#slCap2').html(str);
+                              alert('Add success');
+                          });
+                          
+                    }else{
+                        alert('error');
+                    }
+                })
+            });
+            
+        });
+    </script>
+</head>
+<body>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 mt-5">
+                    <h1 class="h5">ADMIN VIDEO<h1>
+                </div>
+                 <div class="col-12 col-lg-3 mt-3">
+                     <div class="card h-100">
+                    <div class="card-header">
+                        Add Video Vào Cấp 2
+                    </div>
+                    <div class="card-body">
+                        <form action="./xulyvideo" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="slCap2">Cấp 2</label>
+                            <select name="slCap2" id="slCap2" class="form-control">
+                                    <option value="0">Cấp 2</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="txtNameVideo" id="txtNameVideo" class="form-control" placeholder="Nhập tên video">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="txtValueVideo" id="txtValueVideo" class="form-control" placeholder="Nhập iframe">
+                        </div>
+                        <div class="form-group">
+                            <input type="file" name="file-image" id="file-image" class="form-control" placeholder="Chọn ảnh">
+                        </div>
+                        <div class="form-group">
+                            <input id="addVideo" type="submit"  value="add" class="btn btn-primary"/>
+                        </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

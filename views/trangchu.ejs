@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <script src="js/popper.min.js" ></script>
+    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css" >
+    <script src="js/bootstrap.min.js" ></script>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+             //load data menu cấp 1
+             $.post('http://localhost:3000/list/cap1',function(data){
+                     var str ='';
+                    data.result.forEach(function(item){
+                         str+='<a class="dropdown-item" data-value="'+item.name+'" data-id="'+item._id+'">'+item.name+'</a>';
+                       
+                    });
+                $('#menucap1').html(str);
+                    jQuery('#menucap1 .dropdown-item').click(function(){
+                        let idmenucap01 = jQuery(this).data('id');
+                        let value = jQuery(this).data('value');
+                        jQuery('#textchoose').html(value);
+                        $.post('http://localhost:3000/find/cap2',{id: idmenucap01},function(data){
+                            console.log(data);
+                            let strMenucap2 = '';
+                            data.result.forEach(function(items){
+                                strMenucap2 += '<a class="dropdown-item" href="javascipt:;" data-value="'+items.name+'" data-id="'+items._id+'">'+items.name+'</a>';
+                            });
+                            jQuery('#menucap2').html(strMenucap2);
+                            jQuery('#menucap2 .dropdown-item').click(function(){
+                              
+                                let idmenucap2 = jQuery(this).data('id');
+                                let datavaluem2 = jQuery(this).data('value');
+                                  jQuery('#textchoose2').html(datavaluem2);
+                                $.post('http://localhost:3000/find/videos',{id : idmenucap2 },function(data){
+                                    let strvideo = '';
+                                    console.log(data);
+                                    data.result.forEach(function(items){
+                                         strvideo += ' <li class="list-group-item" data-value="'+items.value+'?rel=0&autoplay=1">'+items.name+'</li>';
+                                    });
+                                    $('#listmenucap2').html(strvideo);
+                                    jQuery('#listmenucap2 .list-group-item').click(function(){
+                                        var datavalueiframe = jQuery(this).data('value');
+                                        jQuery('#videoshow').attr('src',datavalueiframe);
+                                    });
+                                })
+                          });
+                        });
+                    });
+                    
+                });
+
+                 $.post('http://localhost:3000/list/cap2',function(data){
+                     var str ='';
+                    data.result.forEach(function(item){
+                         item.danhsach.forEach(function(item){
+                             str +="<li class='list-group-item' data-value='"+item.value+"'>"+item.name+'</li>';
+                         });
+                       
+                    });
+                   
+                     jQuery('#listmenucap2').html(str);
+                    jQuery('#videoshow').attr('src',jQuery('#listmenucap2 li.list-group-item:first').data('value')+'?autoplay=1');
+                    jQuery('#listmenucap2 .list-group-item').click(function(){
+                         var datavalueiframe = jQuery(this).data('value');
+                         jQuery('#videoshow').attr('src',datavalueiframe);
+                     });
+                });
+
+        });
+    </script>
+</head>
+<body>
+    <section class="pt-5 pb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-4 col-md-4 col-lg-3">
+                    <div class="btn-group d-block mb-3">
+                        <button type="button" class="btn btn-danger dropdown-toggle w-100 text-center" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         <span id="textchoose"> Menu Cấp 1</span>
+                        </button>
+                        <div class="dropdown-menu w-100" id="menucap1">
+                        </div>
+                    </div>
+                    <div class="btn-group d-block mb-3">
+                        <button type="button" class="btn btn-danger dropdown-toggle w-100 text-center" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span id="textchoose2">Menu Cấp 2</span>
+                        </button>
+                        <div class="dropdown-menu w-100" id="menucap2"> 
+                        </div>
+                    </div>
+                    <ul class="list-group" id="listmenucap2">
+                       
+                       
+                    </ul>
+                </div>
+                <div class="col-4 col-md-8 col-lg-9">
+                    <div class="embed-responsive embed-responsive-16by9">
+                         <iframe id ="videoshow" class="embed-responsive-item" src="" allowfullscreen></iframe>
+                    </div>
+            </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>
